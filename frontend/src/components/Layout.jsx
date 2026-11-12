@@ -1,20 +1,29 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
-  BarChart3, Bell, BriefcaseBusiness, CalendarDays, ChevronDown, FileText,
+  Bell, BriefcaseBusiness, ChevronDown, FileText,
   LayoutDashboard, LogOut, Menu, Search, Settings, ShieldCheck, Sparkles,
-  Users, X, Plus
+  X, Plus
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const navigation = [
-  ["Dashboard", "/candidate/dashboard", LayoutDashboard],
-  ["Jobs", "/jobs", BriefcaseBusiness],
-  ["Applications", "/candidate/dashboard", FileText],
-  ["Candidates", "/recruiter/dashboard", Users],
-  ["Analytics", "/recruiter/dashboard", BarChart3],
-  ["Schedule", "/recruiter/dashboard", CalendarDays],
-];
+const navigation = {
+  candidate: [
+    ["Dashboard", "/candidate/dashboard", LayoutDashboard],
+    ["Jobs", "/jobs", BriefcaseBusiness],
+    ["Applications", "/applications", FileText],
+  ],
+  recruiter: [
+    ["Dashboard", "/recruiter/dashboard", LayoutDashboard],
+    ["Jobs", "/jobs", BriefcaseBusiness],
+    ["Applications", "/applications", FileText],
+  ],
+  admin: [
+    ["Dashboard", "/admin/dashboard", LayoutDashboard],
+    ["Jobs", "/jobs", BriefcaseBusiness],
+    ["Applications", "/applications", FileText],
+  ],
+};
 
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
@@ -33,10 +42,7 @@ export default function Layout({ children }) {
             </Link>
             <div className="mt-10 px-2 text-[10px] font-bold uppercase tracking-[.2em] text-slate-400">Workspace</div>
             <nav className="mt-3 space-y-1">
-              {navigation.map(([label, path, Icon]) => {
-                const target = user.role === "candidate" && label === "Candidates" ? "/candidate/dashboard" : user.role === "candidate" && ["Analytics", "Schedule"].includes(label) ? "/candidate/dashboard" : path;
-                return <NavLink key={label} to={target} onClick={() => setMobileOpen(false)} className={({isActive}) => `group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${isActive ? "bg-blue-50 text-[#3158e8]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}><Icon size={18}/>{label}</NavLink>;
-              })}
+              {(navigation[user.role] || navigation.candidate).map(([label, path, Icon]) => <NavLink key={label} to={path} onClick={() => setMobileOpen(false)} className={({isActive}) => `group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${isActive ? "bg-blue-50 text-[#3158e8]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}><Icon size={18}/>{label}</NavLink>)}
               {user.role === "candidate" && <NavLink to="/candidate/profile" className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-500 hover:bg-slate-50"><FileText size={18}/>Profile & resume</NavLink>}
               {user.role === "recruiter" && <NavLink to="/recruiter/jobs/new" className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-500 hover:bg-slate-50"><Plus size={18}/>Post a job</NavLink>}
               {user.role === "admin" && <NavLink to="/admin/dashboard" className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-500 hover:bg-slate-50"><ShieldCheck size={18}/>Admin controls</NavLink>}
