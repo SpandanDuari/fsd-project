@@ -1,0 +1,3 @@
+package com.hiretrack.web;
+import com.hiretrack.model.Interview; import com.hiretrack.repo.InterviewRepository; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/interviews") public class InterviewController {final InterviewRepository repo;InterviewController(InterviewRepository r){repo=r;} @GetMapping List<Interview> all(){return repo.findAll();} @PostMapping Interview create(@RequestBody Interview i){i.id=null;return repo.save(i);} @PutMapping("/{id}") Interview update(@PathVariable Long id,@RequestBody Interview i){Interview x=repo.findById(id).orElseThrow();x.scheduledAt=i.scheduledAt;x.mode=i.mode;x.location=i.location;x.status=i.status;x.notes=i.notes;return repo.save(x);}}

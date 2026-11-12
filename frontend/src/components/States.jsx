@@ -1,0 +1,3 @@
+export function Loading({ label = "Loading..." }) { return <div className="flex items-center justify-center gap-3 py-16 text-slate-500"><span className="h-5 w-5 animate-spin rounded-full border-2 border-brand border-t-transparent"/>{label}</div>; }
+export function Empty({ title = "Nothing here yet", text = "Connect your account or check back later." }) { return <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"><h3 className="font-bold">{title}</h3><p className="mt-2 text-sm text-slate-500">{text}</p></div>; }
+export function ErrorState({ text = "We couldn't reach the HireTrack API. Please try again later." }) { return <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">{text}</div>; }

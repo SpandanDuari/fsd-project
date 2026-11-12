@@ -1,0 +1,2 @@
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS resume_name VARCHAR(255);
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS resume_content TEXT;

@@ -1,0 +1,10 @@
+package com.hiretrack.web;
+import com.hiretrack.model.Job; import com.hiretrack.model.User; import com.hiretrack.repo.JobRepository; import com.hiretrack.repo.UserRepository; import org.springframework.jdbc.core.JdbcTemplate; import org.springframework.security.core.Authentication; import org.springframework.web.bind.annotation.*; import java.util.*; import java.time.Instant;
+@RestController @RequestMapping("/api/jobs") public class JobController { private final JobRepository repo; private final UserRepository users; private final JdbcTemplate db; public JobController(JobRepository r,UserRepository u,JdbcTemplate d){repo=r;users=u;db=d;}
+ @GetMapping public List<Job> all(@RequestParam(required=false) String q,@RequestParam(required=false) String search){String term=q!=null?q:search;return term==null?repo.findAll():repo.findAll().stream().filter(j->(j.title+" "+j.description).toLowerCase().contains(term.toLowerCase())).toList();}
+ @GetMapping("/{id}") public Job one(@PathVariable Long id){return repo.findById(id).orElseThrow();}
+ @PostMapping public Job create(@RequestBody Job j,Authentication a){User u=requireRecruiter(a);j.id=null;j.companyId=db.queryForObject("SELECT company_id FROM recruiters WHERE id=?",Long.class,u.getRecruiterId());j.createdAt=Instant.now();return repo.save(j);}
+ @PutMapping("/{id}") public Job update(@PathVariable Long id,@RequestBody Job input,Authentication a){requireRecruiter(a);Job j=repo.findById(id).orElseThrow();j.title=input.title;j.location=input.location;j.description=input.description;j.employmentType=input.employmentType;j.salaryMin=input.salaryMin;j.salaryMax=input.salaryMax;return repo.save(j);}
+ @DeleteMapping("/{id}") public void delete(@PathVariable Long id,Authentication a){requireRecruiter(a);repo.deleteById(id);}
+ private User requireRecruiter(Authentication a){User u=users.findByEmail(a.getName()).orElseThrow();if(!"RECRUITER".equals(u.getRole()))throw new org.springframework.security.access.AccessDeniedException("Recruiters only");return u;}
+}
