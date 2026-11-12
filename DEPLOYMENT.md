@@ -20,6 +20,15 @@ jdbc:postgresql://<host>/<database>?sslmode=require
 
 4. Keep the username and password in Render environment variables only.
 
+For local development after `neon deploy`, use:
+
+```powershell
+.\scripts\Run-HireTrackWithNeon.ps1
+```
+
+This reads the ignored `.env.local` file in memory and maps Neon’s `DATABASE_URL`
+to the Spring Boot JDBC settings. It does not print or commit the connection string.
+
 ## Render
 
 1. Push this repository to GitHub.
