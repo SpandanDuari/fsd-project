@@ -2,14 +2,6 @@
 
 HireTrack is a recruitment platform for candidates, recruiters, and administrators. Candidates can create profiles, upload resumes, discover jobs, and apply. Recruiters can publish jobs and review applications. Administrators can monitor platform-wide candidates, recruiters, jobs, and applications.
 
-## Live deployment
-
-- Frontend: [hiretrack24.netlify.app](https://hiretrack24.netlify.app)
-- Backend API: [hiretrack-p65u.onrender.com](https://hiretrack-p65u.onrender.com)
-- Health check: [API health](https://hiretrack-p65u.onrender.com/api/health)
-- Repository: [SpandanDuari/fsd-project](https://github.com/SpandanDuari/fsd-project)
-
-The Render service may take several seconds to wake up on the free plan.
 
 ## Technology stack
 
