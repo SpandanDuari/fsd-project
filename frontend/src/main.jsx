@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
 import { Landing, SignupChoice, About, Jobs, JobDetail, Auth, Dashboard, AdminDashboard, ApplicationsPage, JobManager, CandidateProfile } from "./pages/Pages";
+import AdminAccounts from "./pages/AdminAccounts";
 
 function Protected({ children, role }) {
   const { user } = useAuth();
@@ -22,6 +23,8 @@ function App() {
     <Route path="/candidate/dashboard" element={<Protected role="candidate"><Dashboard /></Protected>} />
     <Route path="/recruiter/dashboard" element={<Protected role="recruiter"><Dashboard role="recruiter" /></Protected>} />
     <Route path="/admin/dashboard" element={<Protected role="admin"><AdminDashboard /></Protected>} />
+    <Route path="/admin/accounts/candidates" element={<Protected role="admin"><AdminAccounts type="candidates" /></Protected>} />
+    <Route path="/admin/accounts/recruiters" element={<Protected role="admin"><AdminAccounts type="recruiters" /></Protected>} />
     <Route path="/candidate/profile" element={<Protected role="candidate"><CandidateProfile /></Protected>} />
     <Route path="/recruiter/jobs/new" element={<Protected role="recruiter"><JobManager /></Protected>} />
     <Route path="*" element={<Navigate to="/" replace />} />

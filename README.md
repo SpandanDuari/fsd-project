@@ -124,9 +124,17 @@ The frontend is responsible for routing, forms, role-aware navigation, API calls
 
 1. Sign in with an administrator account.
 2. View platform counts for candidates, applications, jobs, and recruiters.
-3. Review recent candidates, including application counts.
-4. Review recent applications and their statuses.
-5. Use the role-specific navigation to access jobs and applications.
+3. Open **Candidate accounts** to manage candidate access.
+4. Open **Recruiter accounts** to manage recruiter access.
+5. Review recent candidates, including application counts.
+6. Review recent applications and their statuses.
+7. Use the role-specific navigation to access jobs and applications.
+
+From either account list, an administrator can:
+
+- Activate or deactivate an account. Deactivated users cannot sign in and existing JWTs are rejected.
+- Generate a secure temporary password. The temporary password is displayed once in the admin UI and should be shared securely.
+- Permanently delete a candidate or recruiter account after confirmation. Candidate applications are removed with the candidate record; recruiter job history is preserved.
 
 ## Authentication and authorization
 
@@ -189,7 +197,11 @@ All API routes are prefixed with `/api`.
 | Method | Route | Purpose |
 |---|---|---|
 | `GET` | `/admin/summary` | Platform-wide record counts |
-| `GET` | `/admin/candidates` | Candidate list with application counts |
+| `GET` | `/admin/candidates` | Candidate account list with application counts and status |
+| `GET` | `/admin/recruiters` | Recruiter account list with company details and status |
+| `PATCH` | `/admin/accounts/{id}/status` | Activate or deactivate a candidate/recruiter account |
+| `POST` | `/admin/accounts/{id}/reset-password` | Generate a temporary password |
+| `DELETE` | `/admin/accounts/{id}` | Permanently delete a candidate/recruiter account |
 | `GET` | `/dashboard/admin` | Administrative dashboard metrics |
 
 See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for additional request and response details.
@@ -206,6 +218,7 @@ Flyway applies migrations in order during backend startup:
 - `V6`: Resume/profile fields
 - `V7`: Development admin seed
 - `V8`: Development admin password correction
+- `V9`: Account activation/deactivation state
 
 Important relationships:
 
@@ -373,6 +386,7 @@ The SPA redirect in [netlify.toml](./netlify.toml) routes unknown frontend paths
 - Keep secrets in environment variables or the deployment provider secret store.
 - Test the smallest affected build or endpoint before opening a pull request.
 - Verify role permissions for every new authenticated endpoint.
+- Account-management operations are restricted to administrators and destructive actions require confirmation.
 - Do not commit `node_modules`, `dist`, `target`, `.env`, or `.env.local`.
 
 ## Known production considerations

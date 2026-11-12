@@ -36,4 +36,17 @@ Login returns a JWT bearer token. Send it as `Authorization: Bearer <token>`.
 - `GET /dashboard/recruiter`
 - `GET /dashboard/admin`
 
+## Administration
+
+All administration routes require the `ADMIN` role.
+
+- `GET /admin/summary`
+- `GET /admin/candidates`
+- `GET /admin/recruiters`
+- `PATCH /admin/accounts/{id}/status` with `{ "active": true|false }`
+- `POST /admin/accounts/{id}/reset-password` (returns a one-time temporary password)
+- `DELETE /admin/accounts/{id}`
+
+Deactivated accounts cannot authenticate, and existing JWTs for them are rejected. Account deletion is permanent: candidate applications are deleted with the candidate record, while recruiter job history is preserved.
+
 Exact response shapes are defined by the controller DTOs in the backend source.
